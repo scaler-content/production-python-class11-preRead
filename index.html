@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Class 11 Pre-Read</title>
+<style>
+  :root {
+    color-scheme: light;
+    --bg: #faf6ef; --card: #fffdf9; --text: #2e2820; --muted: #6e6455;
+    --accent: #b4532a; --accent-soft: #f8ebe0; --border: #e8dfd0;
+    --code-bg: #f4eee2; --code-text: #2e2820;
+    --ok: #2f7a47; --ok-soft: #e8f2e3; --warn: #94590a; --warn-soft: #fbeed0;
+    --bad: #b3261e; --bad-soft: #fbe6e1; --shadow: 0 1px 3px rgba(80,55,20,.10);
+  }
+  
+    * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 118px; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6; font-size: 17px;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 18px 80px; }
+  header.hero { padding: 38px 0 18px; }
+  .kicker { color: var(--accent); font-weight: 700; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; }
+  h1 { font-size: 34px; line-height: 1.2; margin: 6px 0 10px; }
+  .lead { color: var(--muted); font-size: 18px; margin: 0 0 12px; }
+  .pills { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+  .pill { background: var(--accent-soft); color: var(--accent); border-radius: 999px; padding: 4px 12px; font-size: 14px; font-weight: 600; }
+
+  .topbar {
+    position: sticky; top: 0; z-index: 20; background: var(--bg);
+    border-bottom: 1px solid var(--border); padding: 8px 0 8px;
+  }
+  .topbar .wrap { padding-bottom: 0; }
+  .progress { height: 8px; background: var(--border); border-radius: 99px; overflow: hidden; margin-bottom: 8px; }
+  .progress > div { height: 100%; width: 0; background: var(--ok); transition: width .3s ease; }
+  nav { display: flex; gap: 6px; flex-wrap: wrap; font-size: 14px; }
+  nav a {
+    text-decoration: none; color: var(--muted); padding: 3px 10px; border-radius: 99px;
+    border: 1px solid var(--border); background: var(--card);
+  }
+  nav a:hover { color: var(--accent); border-color: var(--accent); }
+  nav a.done { color: var(--ok); border-color: var(--ok); }
+  .pct { font-size: 13px; color: var(--muted); margin: 0 0 6px; }
+
+  section.card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+    padding: 22px 24px; margin: 22px 0; box-shadow: var(--shadow);
+  }
+  section.card h2 { font-size: 25px; margin: 0 0 4px; line-height: 1.25; }
+  .num { color: var(--accent); }
+  h3 { font-size: 19px; margin: 26px 0 6px; }
+  p { margin: 8px 0; }
+  ul, ol { padding-left: 22px; margin: 8px 0; }
+  li { margin: 4px 0; }
+  .muted { color: var(--muted); }
+  .small { font-size: 14px; }
+
+  .callout { border-radius: 10px; padding: 12px 16px; margin: 14px 0; border-left: 5px solid; }
+  .callout.tip { background: var(--accent-soft); border-color: var(--accent); }
+  .callout.warn { background: var(--warn-soft); border-color: var(--warn); }
+  .callout.ok { background: var(--ok-soft); border-color: var(--ok); }
+  .callout strong.t { display: block; margin-bottom: 2px; }
+
+  code, pre, .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
+  code { background: var(--code-bg); padding: 1px 6px; border-radius: 5px; font-size: .92em; }
+  .codeblock { position: relative; margin: 12px 0; }
+  .codeblock pre {
+    margin: 0; background: var(--code-bg); color: var(--code-text); border: 1px solid var(--border);
+    border-radius: 10px; padding: 14px 16px; overflow-x: auto; font-size: 15px; line-height: 1.5;
+  }
+  .codeblock .label { font-size: 13px; color: var(--muted); margin-bottom: 4px; font-weight: 600; }
+  .copy {
+    position: absolute; top: 8px; right: 8px; font-size: 12px; padding: 3px 9px; border-radius: 6px;
+    border: 1px solid var(--border); background: var(--card); color: var(--muted); cursor: pointer;
+  }
+  .copy:hover { color: var(--accent); border-color: var(--accent); }
+  .placeholder {
+    background: var(--warn-soft); color: var(--warn); border: 1px dashed var(--warn);
+    padding: 0 6px; border-radius: 5px; font-weight: 600; white-space: nowrap;
+  }
+
+  table { border-collapse: collapse; width: 100%; margin: 12px 0; font-size: 15px; }
+  th, td { border: 1px solid var(--border); padding: 8px 10px; text-align: left; vertical-align: top; }
+  th { background: var(--accent-soft); color: var(--accent); }
+  .tablewrap { overflow-x: auto; }
+
+  /* tabs */
+  .tabs { margin: 14px 0; }
+  .tablist { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+  .tablist button {
+    font: inherit; font-size: 15px; font-weight: 600; padding: 7px 16px; border-radius: 99px; cursor: pointer;
+    border: 1px solid var(--border); background: var(--card); color: var(--muted);
+  }
+  .tablist button[aria-selected="true"] { background: var(--accent); color: #fff; border-color: var(--accent); }
+  
+  .tabpanel { display: none; }
+  .tabpanel.active { display: block; }
+  .steps { counter-reset: s; list-style: none; padding-left: 0; }
+  .steps li { counter-increment: s; position: relative; padding-left: 38px; margin: 10px 0; }
+  .steps li::before {
+    content: counter(s); position: absolute; left: 0; top: 0; width: 26px; height: 26px; border-radius: 50%;
+    background: var(--accent); color: #fff; font-weight: 700; font-size: 14px; display: grid; place-items: center;
+  }
+  
+
+  /* diagrams */
+  .flow { display: flex; flex-wrap: wrap; gap: 8px; align-items: stretch; margin: 14px 0; }
+  .flow .box {
+    flex: 1 1 150px; border: 2px solid var(--accent); border-radius: 12px; padding: 10px 12px; background: var(--accent-soft);
+  }
+  .flow .box b { display: block; color: var(--accent); font-size: 18px; }
+  .flow .arrow { align-self: center; font-size: 22px; color: var(--accent); }
+
+  .anatomy { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0; font-family: ui-monospace, Menlo, Consolas, monospace; }
+  .anatomy span { padding: 6px 10px; border-radius: 8px; font-size: 15px; }
+  .a-prompt { background: #3b4a6b; color: #fff; }
+  .a-cmd { background: #1f7a3a; color: #fff; }
+  .a-out { background: var(--code-bg); border: 1px solid var(--border); color: var(--code-text); }
+  .legend { font-size: 14px; color: var(--muted); }
+
+  .tasks { list-style: none; padding: 0; margin: 10px 0; }
+  .tasks li { padding: 6px 10px; border: 1px solid var(--border); border-radius: 8px; margin: 6px 0; display: flex; gap: 10px; align-items: center; background: var(--card); }
+  .tasks li .ck { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--border); display: grid; place-items: center; font-size: 13px; flex: none; }
+  .tasks li.done { background: var(--ok-soft); border-color: var(--ok); }
+  .tasks li.done .ck { background: var(--ok); border-color: var(--ok); color: #fff; }
+  .btn {
+    font: inherit; font-size: 15px; font-weight: 600; padding: 8px 16px; border-radius: 10px; cursor: pointer;
+    border: 1px solid var(--accent); background: var(--accent); color: #fff;
+  }
+  
+  .btn.ghost { background: transparent; color: var(--accent); }
+  .btnrow { display: flex; gap: 8px; flex-wrap: wrap; margin: 8px 0; }
+  .hint { min-height: 24px; font-size: 15px; margin: 6px 0; }
+  .hint.good { color: var(--ok); } .hint.bad { color: var(--bad); }
+
+  /* chips / cards */
+  .chips { display: flex; gap: 8px; flex-wrap: wrap; margin: 10px 0; }
+  .chip {
+    font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 16px; padding: 7px 14px; border-radius: 10px; cursor: pointer;
+    border: 1px solid var(--border); background: var(--card); color: var(--text);
+  }
+  .chip[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
+  .readout { background: var(--code-bg); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; min-height: 64px; }
+  .twocol { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 680px) { .twocol { grid-template-columns: 1fr; } }
+  .panel { border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; background: var(--card); }
+  .panel h4 { margin: 0 0 6px; font-size: 15px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+  .cardgrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  @media (max-width: 680px) { .cardgrid { grid-template-columns: 1fr; } }
+
+  /* quiz */
+  .quiz .q { border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; margin: 12px 0; background: var(--card); }
+  .quiz .q p.qt { margin: 0 0 8px; font-weight: 600; }
+  .quiz .opt {
+    display: block; width: 100%; text-align: left; font: inherit; font-size: 16px; padding: 8px 12px; margin: 6px 0; cursor: pointer;
+    border-radius: 8px; border: 1px solid var(--border); background: var(--card); color: var(--text);
+  }
+  .quiz .opt:hover:not(:disabled) { border-color: var(--accent); }
+  .quiz .opt.right { background: var(--ok-soft); border-color: var(--ok); }
+  .quiz .opt.wrong { background: var(--bad-soft); border-color: var(--bad); }
+  .quiz .fb { font-size: 15px; margin-top: 6px; }
+  .score { font-size: 20px; font-weight: 700; margin: 10px 0; }
+
+  .donebar { display: flex; align-items: center; gap: 12px; margin-top: 18px; padding-top: 14px; border-top: 1px dashed var(--border); flex-wrap: wrap; }
+  .donebtn {
+    font: inherit; font-size: 15px; font-weight: 600; padding: 7px 14px; border-radius: 99px; cursor: pointer;
+    border: 1px solid var(--ok); color: var(--ok); background: transparent;
+  }
+  .donebtn[aria-pressed="true"] { background: var(--ok); color: #fff; }
+  
+  footer { text-align: center; color: var(--muted); font-size: 14px; margin-top: 30px; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+
+  /* ---- additions for Class 2 ---- */
+  /* sorter */
+  .sorter { margin: 14px 0; }
+  .sorter .pool { display: flex; gap: 8px; flex-wrap: wrap; min-height: 44px; padding: 10px; border: 1px dashed var(--border); border-radius: 10px; background: var(--card); }
+  .sorter .pool .chip { font-size: 15px; }
+  .sorter .pool .empty { color: var(--ok); font-weight: 600; }
+  .sorter .bins { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 12px; }
+  .sorter .bins.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  @media (max-width: 680px) { .sorter .bins, .sorter .bins.two { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 420px) { .sorter .bins, .sorter .bins.two { grid-template-columns: 1fr; } }
+  .sorter .bin {
+    font: inherit; text-align: left; cursor: pointer; border: 2px solid var(--border); border-radius: 12px; padding: 10px 12px;
+    background: var(--card); color: var(--text); min-height: 84px;
+  }
+  .sorter .bin:hover { border-color: var(--accent); }
+  .sorter .bin b { display: block; color: var(--accent); font-size: 16px; margin-bottom: 2px; }
+  .sorter .bin .why { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+  .sorter .bin .placed { display: flex; flex-wrap: wrap; gap: 4px; }
+  .sorter .bin .placed span { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; background: var(--ok-soft); border: 1px solid var(--ok); color: var(--ok); border-radius: 6px; padding: 0 6px; }
+  .sorter .bin.flash { border-color: var(--bad); background: var(--bad-soft); }
+  .chip.sel { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
+
+  /* folder explorer */
+  .explorer { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); gap: 12px; }
+  @media (max-width: 680px) { .explorer { grid-template-columns: 1fr; } }
+  .explorer .tree button {
+    display: block; width: 100%; text-align: left; font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 15px;
+    background: transparent; border: none; padding: 5px 8px; border-radius: 8px; cursor: pointer; color: var(--text);
+  }
+  .explorer .tree button.f { color: var(--accent); font-weight: 600; }
+  .explorer .tree button[aria-pressed="true"] { background: var(--accent-soft); }
+  .explorer .tree .ind { padding-left: 22px; }
+  .explorer .tree .dim { color: var(--muted); font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 14px; padding: 2px 8px 2px 30px; }
+
+  /* layers */
+  .layers .l { border-radius: 10px; padding: 10px 14px; margin: 6px 0; border: 1px solid var(--border); }
+  .layers .l1 { background: var(--ok-soft); border-color: var(--ok); }
+  .layers .l2 { background: var(--warn-soft); border-color: var(--warn); }
+  .layers .l3 { background: var(--accent-soft); border-color: var(--accent); }
+  .layers b { display: block; }
+
+  .tasks li { align-items: flex-start; }
+  .tasks li .tx { min-width: 0; overflow-wrap: anywhere; }
+  .tasks li .tx code { white-space: normal; }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="wrap">
+    <div class="progress" aria-hidden="true"><div id="bar"></div></div>
+    <p class="pct" id="pct">Progress: 0 of 8 sections marked done</p>
+    <nav id="nav" aria-label="Sections">
+      <a href="#s1" data-s="s1">1 Welcome</a>
+      <a href="#s2" data-s="s2">2 Big idea</a>
+      <a href="#s3" data-s="s3">3 Tools</a>
+      <a href="#s4" data-s="s4">4 Project</a>
+      <a href="#s5" data-s="s5">5 Spark words</a>
+      <a href="#s6" data-s="s6">6 Lazy plans</a>
+      <a href="#s7" data-s="s7">7 Prove it</a>
+      <a href="#s8" data-s="s8">8 Check yourself</a>
+    </nav>
+  </div>
+</div>
+
+<div class="wrap">
+
+<header class="hero">
+  <div class="kicker">FDE Module 2 &middot; Pre-read for Class 11</div>
+  <h1>PySpark: When Python Meets Big Data</h1>
+  <p class="lead">Class 10 made the Workbench easy to change. Class 11 asks what happens when the data gets bigger and arrives in another shape. The old case system has sent two years of history as a Parquet file, and next quarter&rsquo;s export will be ten times larger. You will meet Spark in plain words (driver, executors, partitions), read CSV and Parquet with written schemas, see what is lazy and what runs, build one slice that must agree with the Python code you already trust, and prepare a small, capped list for an AI step that comes later and outside Spark. <strong>This class needs Java on your computer</strong>, so the install steps in section 3 matter. Read this before class, then arrive with your tools ready.</p>
+  <div class="pills">
+    <span class="pill">About 50 minutes</span>
+    <span class="pill">Install Java 21</span>
+    <span class="pill">Quick games and a short quiz</span>
+  </div>
+</header>
+
+<!-- ================= 1 WELCOME ================= -->
+<section class="card" id="s1">
+  <h2><span class="num">1.</span> Welcome</h2>
+  <p>In Class 10 you drew a seam around the vendor and compared a second provider with evidence. The Workbench is still a Python program that reads files one after another. The Operations lead sends a message: <em>&ldquo;The old case system gave us two years of history as a Parquet file, and next quarter&rsquo;s export will be ten times bigger. Do we need Spark, and can we trust it to say the same thing as the code we already trust?&rdquo;</em> Today you answer with numbers from a real run. The rule of the class is: <strong>Spark prepares, Python decides, and the model comes later and outside</strong>.</p>
+  <p>By the end of class you will have:</p>
+  <div class="cardgrid">
+    <div class="panel">
+      <h4>You will learn to</h4>
+      <ul>
+        <li>Say what runs on the <strong>driver</strong> and what runs on the <strong>executors</strong>, and what a <strong>partition</strong> and a <strong>SparkSession</strong> are</li>
+        <li>Read CSV, JSON and <strong>Parquet</strong> with a <strong>written schema</strong>, and see why a guessed schema is risky</li>
+        <li>Write the case rules as <strong>native column expressions</strong>: select, filter, withColumn, rename, drop, dates, nulls</li>
+        <li>Tell a <strong>transformation</strong> from an <strong>action</strong>, read a plan, and say why an unrestricted <code>collect()</code> is unsafe</li>
+        <li>Build a slice that writes <strong>curated</strong> and <strong>rejected</strong> Parquet, and prove <strong>parity</strong> with Python</li>
+        <li>Compare a native expression with a <strong>UDF</strong>, and prepare a capped <code>review_candidates</code> table, with the cost estimated before any call</li>
+      </ul>
+    </div>
+    <div class="panel">
+      <h4>You do not need to</h4>
+      <ul>
+        <li>Know Java or Scala. You install Java once, and never write it</li>
+        <li>Have a cluster. Spark runs on your own computer in <strong>local mode</strong></li>
+        <li>Have an API key. No model is called in Spark, and the one fake model in class only counts calls</li>
+        <li>Know Spark already. Every word is defined when it first appears</li>
+        <li>Pay for anything</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout tip"><strong class="t">How to use this page</strong>
+    Go in order. Section 3 is the one to finish <strong>before</strong> class, because it installs Java, checks your Class 10 project and adds the starter pack. Click the small interactive boxes, since they help you remember. Press <em>Mark as done</em> at the end of each section. If a step fails, write down what you saw and tell your instructor. Please do not spend more than 20 minutes stuck on any one thing.
+  </div>
+  <div class="donebar"><button class="donebtn" data-done="s1" aria-pressed="false">Mark as done</button></div>
+</section>
+
+<!-- ================= 2 BIG IDEA ================= -->
+<section class="card" id="s2">
+  <h2><span class="num">2.</span> The big idea: prepare in Spark, decide in Python</h2>
+  <p>Think of a warehouse and a front desk. The warehouse (Spark) can sort huge piles of boxes in parallel, but it cannot talk to customers. The front desk (your Python code) makes the decisions, one careful step at a time. The Workbench&rsquo;s rules should give the same answer whichever of them runs them, and a paid AI call belongs at the front desk, with a cap and a cache, never inside the warehouse.</p>
+  <p>The class works through four findings, each one backed by a number from a real run. Click each one.</p>
+  <div class="chips" id="hideChips">
+    <button class="chip" data-i="0" aria-pressed="false">Do we need Spark?</button>
+    <button class="chip" data-i="1" aria-pressed="false">A guessed schema</button>
+    <button class="chip" data-i="2" aria-pressed="false">Nothing ran</button>
+    <button class="chip" data-i="3" aria-pressed="false">A model inside a UDF</button>
+  </div>
+  <div class="readout" id="hideOut" aria-live="polite">Click an item above.</div>
+
+  <h3>The three promises of Class 11</h3>
+  <div class="flow" aria-label="Three promises">
+    <div class="box"><b>1. Control the schema</b>Say what every column is, parse in expressions, and give every bad row a reason</div><div class="arrow">&rarr;</div>
+    <div class="box"><b>2. Prove parity</b>Identifiers, mappings, counts and rejection reasons must match the Python judge</div><div class="arrow">&rarr;</div>
+    <div class="box"><b>3. Keep the model outside</b>Spark writes a capped table. The model is called later, from Python, after an estimate</div>
+  </div>
+
+  <div class="callout warn"><strong class="t">What we will not do in Class 11</strong>
+    No cluster: Spark runs in local mode, so every timing is a small-machine timing. No streaming and no Spark ML. No model call in the slice, real or simulated: the one <strong>fake</strong> model in Section 9 of the class only counts how often Spark would call it. Prices are <strong>assumptions</strong> in a dated file, not quotes. The reports, the three fingerprints and the Streamlit app stay the same.
+  </div>
+  <div class="donebar"><button class="donebtn" data-done="s2" aria-pressed="false">Mark as done</button></div>
+</section>
+
+<!-- ================= 3 TOOLS ================= -->
+<section class="card" id="s3">
+  <h2><span class="num">3.</span> Check your tools</h2>
+  <p>This is the section to finish before class. You need one new thing: <strong>Java</strong>. Allow about 30 minutes, most of it for downloads.</p>
+  <div class="tablewrap">
+  <table>
+    <tr><th>What</th><th>Why it matters</th><th>Ready when</th></tr>
+    <tr><td><strong>Python</strong></td><td>Runs the program. The project is built, tested and checked on Python 3.11</td><td><span class="placeholder">3.11</span></td></tr>
+    <tr><td><strong>Java 21 (new)</strong></td><td>Spark itself is a Java program. The <code>pyspark</code> package you install with pip is only the Python side, and it cannot start without Java</td><td><code>java -version</code> prints <code>openjdk version "21...</code></td></tr>
+    <tr><td><strong>Your Class 10 project</strong></td><td>Class 11 builds on it, one folder at a time</td><td>It runs, <code>pytest</code> shows <code>311 passed, 1 xfailed</code>, and <code>mypy</code> shows <code>Success: no issues found in 82 source files</code></td></tr>
+    <tr><td><strong>Starter Files for Class 11</strong></td><td>A Spark session builder, a history Parquet file, the old status table, dirty fixtures and a Spark test fixture</td><td>Downloaded from the link your instructor shares, and unzipped over your project. Then <code>mypy</code> shows <code>86 source files</code>, and the Spark check below prints <code>5</code></td></tr>
+    <tr><td><strong>Git</strong></td><td>You keep working in your repository, as in Class 10</td><td><code>git --version</code> prints a version</td></tr>
+  </table>
+  </div>
+
+  <h3>3.1 Check Python and Git</h3>
+  <p>Open a terminal and run the command for your system. Please use Python 3.11. Python 3.12 and 3.13 run pytest, ruff and Spark correctly, but the type check (mypy) can stop with an error about a numpy stub on those versions, so the project stays on 3.11.</p>
+  <div class="tabs" data-tabs="pyver">
+    <div class="tablist" role="tablist" aria-label="Operating system">
+      <button role="tab" aria-selected="true" data-tab="win">Windows</button>
+      <button role="tab" aria-selected="false" data-tab="mac">Mac and Linux</button>
+    </div>
+    <div class="tabpanel active" data-panel="win">
+      <div class="codeblock"><div class="label">Windows PowerShell</div><button class="copy">Copy</button><pre>py --version
+git --version</pre></div>
+      <p class="small muted">Expect something like <code>Python 3.11.9</code> and <code>git version 2.45.0</code>.</p>
+    </div>
+    <div class="tabpanel" data-panel="mac">
+      <div class="codeblock"><div class="label">macOS or Linux</div><button class="copy">Copy</button><pre>python3 --version
+git --version</pre></div>
+      <p class="small muted">Expect something like <code>Python 3.11.9</code> and <code>git version 2.45.0</code>.</p>
+    </div>
+  </div>
+
+  <h3>3.2 Install Java 21</h3>
+  <div class="callout tip"><strong class="t">Why Java, when the course is Python?</strong>
+    Spark&rsquo;s engine is written in Scala and runs on the Java Virtual Machine (the JVM). <code>pip install pyspark</code> installs the Python side and the Spark libraries, but not Java itself. When your code starts a SparkSession, Python starts a Java process in the background and talks to it. No Java means no Spark. You install it once, and then you work only in Python.
+  </div>
+  <p>Download <strong>Temurin 21 (LTS)</strong>, a free Java from the Adoptium project, from this page: <a href="https://adoptium.net/temurin/releases?version=21&amp;os=any&amp;arch=any" target="_blank" rel="noopener" class="placeholder">adoptium.net/temurin/releases (version 21)</a>. On that page, use the filters to choose your operating system and chip, set the package type to <strong>JDK</strong>, and keep version <strong>21 &ndash; LTS</strong>. Then follow the steps for your system.</p>
+  <div class="tabs" data-tabs="java">
+    <div class="tablist" role="tablist" aria-label="Operating system for Java">
+      <button role="tab" aria-selected="true" data-tab="win">Windows</button>
+      <button role="tab" aria-selected="false" data-tab="mac">Mac</button>
+    </div>
+    <div class="tabpanel active" data-panel="win">
+      <ol class="steps">
+        <li><strong>Pick the right file.</strong> On the Adoptium page set <em>Operating System</em> to <strong>Windows</strong>, <em>Architecture</em> to <strong>x64</strong> (most Windows PCs; choose <strong>aarch64</strong> only for an ARM laptop), <em>Package Type</em> to <strong>JDK</strong>, and download the <strong>.msi</strong> installer.</li>
+        <li><strong>Run the installer.</strong> Open the .msi. On the <em>Custom Setup</em> screen, switch on <strong>Add to PATH</strong> and <strong>Set JAVA_HOME variable</strong> (click the small drive icon next to each and choose <em>Entire feature will be installed on local hard drive</em>). Then click Next and Install, and allow it when Windows asks.</li>
+        <li><strong>Open a new terminal.</strong> Close every PowerShell and VS Code window and open a new one. Old windows do not see the change.</li>
+        <li><strong>Check it.</strong> Run the two commands below.</li>
+      </ol>
+      <div class="codeblock"><div class="label">Windows PowerShell</div><button class="copy">Copy</button><pre>java -version
+echo $env:JAVA_HOME</pre></div>
+      <p class="small muted">Expect <code>openjdk version "21.0...</code> from the first command, and a path such as <code>C:\Program Files\Eclipse Adoptium\jdk-21...</code> from the second. If <code>java</code> is not recognised, the PATH box was not ticked: run the installer again and switch it on.</p>
+      <div class="callout warn"><strong class="t">Windows and Spark: one thing we have not tested</strong>
+        Spark can start and read files on Windows with Java alone. Writing Parquet files on Windows can stop with an error that mentions <code>HADOOP_HOME</code>, <code>winutils.exe</code> or <code>NativeIO</code>, because Spark expects some Hadoop helper files that Windows does not have. We tested this course on Mac and Linux, not on Windows. If the check in 3.3 or the class demos show such an error, tell your instructor. The safe fallbacks are Windows Subsystem for Linux (WSL 2, with Ubuntu) or Google Colab.
+      </div>
+    </div>
+    <div class="tabpanel" data-panel="mac">
+      <ol class="steps">
+        <li><strong>Find your chip.</strong> Open Terminal and run <code>uname -m</code>. <code>arm64</code> means Apple Silicon (M1, M2, M3, M4): download <strong>aarch64</strong>. <code>x86_64</code> means Intel: download <strong>x64</strong>.</li>
+        <li><strong>Pick the right file.</strong> On the Adoptium page set <em>Operating System</em> to <strong>macOS</strong>, <em>Architecture</em> to your chip, <em>Package Type</em> to <strong>JDK</strong>, and download the <strong>.pkg</strong> installer.</li>
+        <li><strong>Run the installer.</strong> Open the .pkg and click through it. It asks for your Mac password. Homebrew is not needed.</li>
+        <li><strong>Open a new Terminal window.</strong> Old windows do not see the change. Then run the checks and the two settings below, one command at a time.</li>
+      </ol>
+      <div class="codeblock"><div class="label">macOS Terminal: check it</div><button class="copy">Copy</button><pre>java -version
+/usr/libexec/java_home -V</pre></div>
+      <p class="small muted">Expect <code>openjdk version "21.0...</code> and a line that names <code>Eclipse Adoptium</code>. If you see <code>Unable to locate a Java Runtime</code>, Java is not installed yet: a fresh Mac has a <code>java</code> command that only points you to a download page.</p>
+      <div class="codeblock"><div class="label">macOS Terminal: save two settings for every new window</div><button class="copy">Copy</button><pre>echo 'export JAVA_HOME=$(/usr/libexec/java_home -v 21)' >> ~/.zshrc
+echo 'export SPARK_LOCAL_IP=127.0.0.1' >> ~/.zshrc
+source ~/.zshrc</pre></div>
+      <p class="small muted"><code>JAVA_HOME</code> tells Spark which Java to use. <code>SPARK_LOCAL_IP</code> stops Spark from tripping over Mac network or hostname settings.</p>
+    </div>
+  </div>
+  <p class="small muted">Linux: install Java 21 with your package manager (on Ubuntu, <code>sudo apt install openjdk-21-jdk</code>) or download the <code>.tar.gz</code> from the Adoptium page, then check <code>java -version</code>.</p>
+  <div class="callout warn"><strong class="t">When you paste commands</strong>
+    Paste one command at a time, without the explanation text. In the Mac terminal, a <code>#</code> comment pasted with a command is read as part of the command and breaks it.
+  </div>
+
+  <h3>3.3 Check your Class 10 project, add the starter pack, and test Spark</h3>
+  <p>Open your project folder in VS Code and make sure your virtual environment is active. On Windows use <code>py</code> instead of <code>python3</code> if <code>python</code> is not found.</p>
+  <div class="codeblock"><div class="label">From the project root, with the environment active: your Class 10 project</div><button class="copy">Copy</button><pre>python -m pytest -q
+python -m mypy</pre></div>
+  <p class="small muted">Expect a last line that says <code>311 passed, 1 xfailed</code>, then <code>Success: no issues found in 82 source files</code>.</p>
+  <p>Now unzip the starter pack over your project. It adds files and makes small changes to <code>requirements.txt</code>, <code>pyproject.toml</code> and <code>tests/conftest.py</code>, so nothing you wrote is lost. Then install the new packages (pyspark, pyarrow, pandas, numpy), which are pinned to exact versions.</p>
+  <div class="codeblock"><div class="label">After copying the Class 11 starter pack in</div><button class="copy">Copy</button><pre>python -m pip install -r requirements.txt
+python -m pytest -q
+python -m mypy</pre></div>
+  <p class="small muted">Expect <code>311 passed, 1 xfailed</code> again (the starter adds no tests), then <code>Success: no issues found in 86 source files</code>. The install can take a few minutes: pyspark is a large download.</p>
+  <p>Last, start Spark once. The first start takes 5 to 10 seconds, because a Java process has to start.</p>
+  <div class="codeblock"><div class="label">The Spark check</div><button class="copy">Copy</button><pre>python -c "from meridian_workbench.spark.session import build_session; s = build_session('check'); print(s.range(5).count()); s.stop()"</pre></div>
+  <p class="small muted">Expect a number <code>5</code> on its own line. A few <code>WARN</code> lines and a progress bar are normal: they come from Spark and can be ignored.</p>
+
+  <div class="callout tip"><strong class="t">A note about your own numbers</strong>
+    The counts in class (how many rows were accepted, how many cases were flagged) must match yours. The seconds will not: every timing in class was taken on a two-core machine in local mode, and yours may be faster or slower. The model in the demos is a <strong>fake</strong> that only counts calls, and prices are an <strong>assumption</strong> in a dated file.
+  </div>
+
+  <h3>If something goes wrong</h3>
+  <div class="tablewrap">
+  <table>
+    <tr><th>What you see</th><th>Likely cause and fix</th></tr>
+    <tr><td><code>JAVA_GATEWAY_EXITED</code>: &ldquo;Java gateway process exited before sending its port number&rdquo;</td><td>Spark could not start Java. Run <code>java -version</code>. If it fails or shows a version below 17, install Java 21 (3.2), open a new terminal, and try again. On a Mac, also set <code>JAVA_HOME</code> and <code>SPARK_LOCAL_IP</code>.</td></tr>
+    <tr><td><code>Unable to locate a Java Runtime</code> (Mac)</td><td>There is no Java on the machine. Install the Temurin 21 .pkg from the Adoptium link, then open a new Terminal.</td></tr>
+    <tr><td><code>java</code> is not recognised (Windows)</td><td>The installer&rsquo;s <em>Add to PATH</em> box was not switched on, or you are in an old terminal. Re-run the .msi with it on, and open a new PowerShell.</td></tr>
+    <tr><td><code>ModuleNotFoundError: No module named 'pyspark'</code></td><td>The packages are not installed in this environment. Activate your virtual environment and run <code>python -m pip install -r requirements.txt</code>.</td></tr>
+    <tr><td>The tests do not show <code>311 passed, 1 xfailed</code></td><td>Do not fix it alone. Tell your instructor which test failed, and bring the last line of the error.</td></tr>
+    <tr><td>Python was not found, or the version is 3.10 or lower</td><td>Install Python 3.11 from python.org, then open a new terminal and check again.</td></tr>
+    <tr><td>Fingerprints: DIFFERENT from before</td><td>Stop. A trusted report changed when it should not have. Class 11 adds Spark next to the Python code and never changes the three Class 5 sample-batch fingerprints, so find which file changed before going further.</td></tr>
+  </table>
+  </div>
+  <div class="donebar"><button class="donebtn" data-done="s3" aria-pressed="false">Mark as done</button></div>
+</section>
+
+<!-- ================= 4 PROJECT ================= -->
+<section class="card" id="s4">
+  <h2><span class="num">4.</span> Where the new pieces go</h2>
+  <p>Class 11 adds one new package, <code>spark/</code>, with the readers, the judge, the candidates, the estimate, the slice and the parity check. It also adds a history file, the old status table, dirty fixtures, two test files and one short guide. Nothing in the Python code you wrote is edited. Click a folder to see what changes.</p>
+  <div class="explorer">
+    <div class="panel tree" id="treeBox">
+      <button class="f" data-d="root" aria-pressed="true">meridian-workbench/</button>
+      <div class="ind">
+        <button class="f" data-d="src" aria-pressed="false">src/meridian_workbench/</button>
+        <button class="f" data-d="spark" aria-pressed="false">&nbsp;&nbsp;spark/</button>
+        <button class="f" data-d="tests" aria-pressed="false">tests/</button>
+        <button class="f" data-d="data" aria-pressed="false">history/ and fixtures/</button>
+        <button class="f" data-d="docs" aria-pressed="false">docs/</button>
+        <button data-d="files" aria-pressed="false">pyproject.toml, requirements.txt &hellip;</button>
+      </div>
+    </div>
+    <div class="panel"><h4 id="treeTitle">The whole project</h4><div id="treeText"></div></div>
+  </div>
+  <div class="callout tip"><strong class="t">Picture it</strong>
+    The Workbench was a careful clerk who reads each file in turn. Class 11 adds a sorting hall next door. Boxes go in, are sorted by the same rules, and come out in two labelled crates: accepted and rejected, each rejection with a note saying why. The clerk then checks a sample of the crates against what she would have done herself.
+  </div>
+  <div class="donebar"><button class="donebtn" data-done="s4" aria-pressed="false">Mark as done</button></div>
+</section>
+
+<!-- ================= 5 SPARK WORDS ================= -->
+<section class="card" id="s5">
+  <h2><span class="num">5.</span> Spark in plain words</h2>
+  <p>A normal Python program is one process: it reads, it computes, it writes. A Spark program is a plan and some workers. You write the plan in Python. Spark cuts the data into pieces, hands the pieces to workers, and puts the answers together. Four words cover it.</p>
+  <div class="tablewrap">
+  <table>
+    <tr><th>Word</th><th>In plain words</th><th>In the Workbench</th></tr>
+    <tr><td><strong>Driver</strong></td><td>The one process that runs your script. It builds the plan and receives small results</td><td><code>python -m meridian_workbench.spark.vertical_slice</code>. It prints the counts and writes <code>manifest.json</code></td></tr>
+    <tr><td><strong>Executor</strong></td><td>A worker that runs tasks on pieces of the data. On a cluster, other machines. In local mode, threads inside the same Java process</td><td>The judge, the window and the Parquet writes run here</td></tr>
+    <tr><td><strong>Partition</strong></td><td>One piece of a table. One task works on one partition, and the cores decide how many run at once</td><td>The 200,000-row export is read as 2 partitions, and split into 4 in the demo</td></tr>
+    <tr><td><strong>SparkSession</strong></td><td>The entry point: the front desk for every request</td><td><code>build_session()</code> in <code>spark/session.py</code></td></tr>
+  </table>
+  </div>
+  <p>Click an item, then click the bin where it runs.</p>
+  <div class="sorter" id="sortKinds"></div>
+  <div class="callout tip"><strong class="t">Local mode</strong>
+    On your computer there is one Spark Java process. The executors are threads inside it, and your Python script is a separate process. The roles are the same as on a cluster, and the machines are not. That is why we can learn all of this on a laptop, and why we never read a laptop timing as a cluster timing.
+  </div>
+  <div class="donebar"><button class="donebtn" data-done="s5" aria-pressed="false">Mark as done</button></div>
+</section>
+
+<!-- ================= 6 LAZY ================= -->
+<section class="card" id="s6">
+  <h2><span class="num">6.</span> Lazy plans, actions and native expressions</h2>
+  <p>When you write <code>df.filter(...).select(...)</code>, nothing is read. Spark only remembers the plan. Work starts when you ask for a result. This is the most useful fact about Spark, and the cause of most surprises, including a model that gets called twice.</p>
+  <h3>Transformation or action?</h3>
+  <p>Click an item, then click the bin it belongs in.</p>
+  <div class="sorter" id="sortWrap"></div>
+
+  <h3>Five things to notice</h3>
+  <p>Click one to see what the class showed and what to do about it.</p>
+  <div class="chips" id="closeChips">
+    <button class="chip" data-i="0" aria-pressed="false">Zero jobs</button>
+    <button class="chip" data-i="1" aria-pressed="false">Two counts, two reads</button>
+    <button class="chip" data-i="2" aria-pressed="false">A shuffle in the plan</button>
+    <button class="chip" data-i="3" aria-pressed="false">A collect that fails</button>
+    <button class="chip" data-i="4" aria-pressed="false">A Python UDF</button>
+  </div>
+  <div class="readout" id="closeOut" aria-live="polite">Click an item above.</div>
+
+  <div class="callout tip"><strong class="t">Native first</strong>
+    A <strong>native expression</strong> is a column formula built from Spark&rsquo;s own functions, such as <code>F.upper</code> or <code>F.when</code>. Spark plans it and runs it inside Java. A <strong>UDF</strong> is your own Python function used as a column, and Spark has to send each row out to a Python process and back. Use native expressions by default, and a UDF only when nothing native can say it.
+  </div>
+  <div class="donebar"><button class="donebtn" data-done="s6" aria-pressed="false">Mark as done</button></div>
+</section>
+
+<!-- ================= 7 PROVE IT ================= -->
+<section class="card" id="s7">
+  <h2><span class="num">7.</span> Prove it agrees, and keep the model outside</h2>
+  <p>Spark and Python are now two programs that claim to read the same files in the same way. We do not trust the claim: we compare them. And because the next class calls a model, this class only prepares a small, capped list and prices the work first. Three rules:</p>
+  <div class="flow" aria-label="Rules">
+    <div class="box"><b>1. Compare, do not assume</b>Identifiers, mappings, counts and rejection reasons must match the Python judge</div><div class="arrow">&rarr;</div>
+    <div class="box"><b>2. Cap and estimate</b>A bounded table, and a cost estimate before any live call</div><div class="arrow">&rarr;</div>
+    <div class="box"><b>3. Keep the kinds of fact apart</b>Measured here, simulated here, or assumed from a price file</div>
+  </div>
+
+  <h3>Measured, simulated or assumed?</h3>
+  <p>Click an item, then click the bin for how we know it.</p>
+  <div class="sorter" id="sortRetry"></div>
+
+  <h3>Five things the class showed</h3>
+  <p>Click one to see what we saw and what the rule says.</p>
+  <div class="chips" id="stackChips">
+    <button class="chip" data-i="0" aria-pressed="false">Do the engines agree?</button>
+    <button class="chip" data-i="1" aria-pressed="false">A copy broken on purpose</button>
+    <button class="chip" data-i="2" aria-pressed="false">The cap</button>
+    <button class="chip" data-i="3" aria-pressed="false">The cost estimate</button>
+    <button class="chip" data-i="4" aria-pressed="false">Why not call the model in Spark?</button>
+  </div>
+  <div class="readout" id="stackOut" aria-live="polite">Click an item above.</div>
+
+  <div class="callout warn"><strong class="t">Do not read the prices as quotes</strong>
+    The prices in <code>config/prices.toml</code> carry a date (2026-11-04) and the word &ldquo;assumption&rdquo;. The estimate shows the size of a decision, not an invoice. Before a real run, copy the current prices from the vendor&rsquo;s own pages and change the date.
+  </div>
+  <div class="donebar"><button class="donebtn" data-done="s7" aria-pressed="false">Mark as done</button></div>
+</section>
+
+<!-- ================= 8 CHECK YOURSELF ================= -->
+<section class="card" id="s8">
+  <h2><span class="num">8.</span> Check yourself</h2>
+  <p>Five quick questions. They are not graded. They show you what to look at again. You can retry as often as you like.</p>
+  <div class="quiz" id="finalQuiz"></div>
+  <div class="score" id="finalScore" aria-live="polite"></div>
+
+  <h3>If something breaks: five signs and what they mean</h3>
+  <p>Click a sign you are seeing to see what it usually means.</p>
+  <div class="chips" id="traceChips">
+    <button class="chip" data-i="0">JAVA_GATEWAY_EXITED</button>
+    <button class="chip" data-i="1">_corrupt_record</button>
+    <button class="chip" data-i="2">CANNOT_PARSE_TIMESTAMP</button>
+    <button class="chip" data-i="3">maxResultSize</button>
+    <button class="chip" data-i="4">Fingerprints: DIFFERENT</button>
+  </div>
+  <div class="readout" id="traceOut" aria-live="polite">Click an item above.</div>
+
+  <h3>Before Class 11: your checklist</h3>
+  <ul class="tasks" id="finalChecks">
+    <li data-check="1"><span class="ck"></span>Python 3.11 is installed, and the version command shows it</li>
+    <li data-check="2"><span class="ck"></span>Java 21 is installed, and <code>java -version</code> shows <code>openjdk version "21...</code></li>
+    <li data-check="3"><span class="ck"></span>My Class 10 project shows <code>311 passed, 1 xfailed</code>, and mypy is clean on 82 files</li>
+    <li data-check="4"><span class="ck"></span>I unzipped the Starter Files for Class 11 into my project, ran <code>python -m pip install -r requirements.txt</code>, and mypy now says 86 files</li>
+    <li data-check="5"><span class="ck"></span>The Spark check printed <code>5</code></li>
+    <li data-check="6"><span class="ck"></span>I can say what the driver, an executor, a partition and a SparkSession are, in my own words</li>
+    <li data-check="7"><span class="ck"></span>I can say what is lazy, what triggers work, and why <code>collect()</code> on a big table is unsafe</li>
+    <li data-check="8"><span class="ck"></span>I can say why no model call belongs inside a Spark transformation</li>
+    <li data-check="9"><span class="ck"></span>I tried the games and answered the quiz</li>
+  </ul>
+  <p class="small muted">Click an item to tick it. Your ticks are saved in this browser only.</p>
+
+  <div class="callout ok"><strong class="t">What happens next</strong>
+    In Class 11 you will compare Python and Spark on one export, read CSV and Parquet with written schemas, write the case rules as native expressions, watch a lazy plan and a failing collect, build the vertical slice that writes curated, rejected and review-candidate Parquet, prove parity with Python, test it, compare a native expression with a UDF, and estimate the cost of the AI step without making a call. We finish with a recommendation to the client. Send your instructor a note if any step above did not work.
+  </div>
+  <div class="donebar"><button class="donebtn" data-done="s8" aria-pressed="false">Mark as done</button></div>
+</section>
+
+<footer>FDE Module 2 &middot; Class 11 pre-read</footer>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  function $(s, r) { return (r || document).querySelector(s); }
+  function $$(s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
+  function esc(t) { return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+  /* ---------- tabs ---------- */
+  $$('.tabs').forEach(function (box) {
+    var btns = $$('[role="tab"]', box), panels = $$('.tabpanel', box);
+    function show(name) {
+      btns.forEach(function (b) { b.setAttribute('aria-selected', b.dataset.tab === name ? 'true' : 'false'); });
+      panels.forEach(function (p) { p.classList.toggle('active', p.dataset.panel === name); });
+    }
+    btns.forEach(function (b) { b.addEventListener('click', function () { show(b.dataset.tab); }); });
+    box._show = show;
+  });
+  try {
+    var plat = ((navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || navigator.userAgent || '').toLowerCase();
+    $$('.tabs').forEach(function (bx) { if (bx._show) bx._show(plat.indexOf('win') > -1 ? 'win' : 'mac'); });
+  } catch (e) { /* ignore */ }
+
+  /* ---------- copy buttons ---------- */
+  $$('.codeblock').forEach(function (cb) {
+    var btn = $('.copy', cb), pre = $('pre', cb);
+    if (!btn || !pre) return;
+    btn.addEventListener('click', function () {
+      var text = pre.textContent;
+      function ok() { btn.textContent = 'Copied'; setTimeout(function () { btn.textContent = 'Copy'; }, 1400); }
+      function fallback() {
+        var ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select();
+        try { document.execCommand('copy'); ok(); } catch (e2) { btn.textContent = 'Select and copy'; }
+        document.body.removeChild(ta);
+      }
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(text).then(ok, fallback); }
+        else { fallback(); }
+      } catch (e) { fallback(); }
+    });
+  });
+
+  /* ---------- progress (per viewer, saved in this browser only) ---------- */
+  var done = {};
+  try { done = JSON.parse(localStorage.getItem('c11preread') || '{}') || {}; } catch (e) { done = {}; }
+  function save() { try { localStorage.setItem('c11preread', JSON.stringify(done)); } catch (e) { /* ignore */ } }
+  function refresh() {
+    var ids = ['s1', 's2', 's3', 's4', 's5', 's6', 's7', 's8'], n = 0;
+    ids.forEach(function (id) {
+      var on = !!done[id]; if (on) n++;
+      $$('[data-done="' + id + '"]').forEach(function (b) { b.setAttribute('aria-pressed', on ? 'true' : 'false'); b.textContent = on ? 'Done ✓' : 'Mark as done'; });
+      var a = $('nav a[data-s="' + id + '"]'); if (a) a.classList.toggle('done', on);
+    });
+    $('#bar').style.width = Math.round(n / ids.length * 100) + '%';
+    $('#pct').textContent = 'Progress: ' + n + ' of ' + ids.length + ' sections marked done';
+  }
+  $$('[data-done]').forEach(function (b) {
+    b.addEventListener('click', function () { done[b.dataset.done] = !done[b.dataset.done]; save(); refresh(); });
+  });
+  try { refresh(); } catch (e) { /* ignore */ }
+
+  /* ---------- generic chip readout ---------- */
+  function chipReadout(chipSel, outSel, data, fixLabel) {
+    $$(chipSel).forEach(function (c) {
+      c.addEventListener('click', function () {
+        $$(chipSel).forEach(function (x) { x.setAttribute('aria-pressed', 'false'); });
+        c.setAttribute('aria-pressed', 'true');
+        var h = data[+c.dataset.i];
+        $(outSel).innerHTML = '<strong>' + h[0] + '</strong><br>' + h[1] + '<br><strong style="color:var(--ok)">' + fixLabel + '</strong> ' + h[2];
+      });
+    });
+  }
+
+  chipReadout('#hideChips .chip', '#hideOut', [["Do we need Spark?", "On a 200,000-row export, the Python judge (the three judges only) took 3.4 seconds. The Spark slice, which does more (startup, row numbers, the attention rules, the candidates and five Parquet outputs), took 48.09 seconds, with 20 jobs on two cores. The two do different amounts of work.", "At this size Python is faster, and we say so. The case for Spark is history that arrives as Parquet and keeps growing, volume that may stop fitting in one process, and files that other teams already write in Parquet."], ["A guessed schema", "<code>inferSchema=True</code> gave a date column for a clean file and a string column for a file with one bad date. The same line gave two different answers, because the type came from the data.", "Write the schema once, read every text column as a string, and parse in expressions, so that each bad value keeps a reason."], ["Nothing ran", "<code>df.filter(...).select(...)</code> on a 200,000-row CSV, with a written schema, ran 0 Spark jobs. The first <code>count()</code> ran 1 job. The same <code>count()</code> again ran one more and read the file again.", "Know where the actions are. Use <code>cache()</code> when one table feeds several results."], ["A model inside a UDF", "A <strong>fake</strong> paid model inside a UDF was called 17 times for 12 notes after one action, because a task failed and reran its rows. A second action made 17 more, so 34 in all. (Simulated: the count is real, the model is not.)", "Keep model calls outside Spark. Write a capped table, and call the model later from Python, with a cap, a rate limit and a cache."]], 'What to do:');
+
+  /* ---------- section 4: folder explorer ---------- */
+  var DIRS = {"root": ["The whole project", "The Class 10 layout stays. Class 11 adds a <code>spark</code> package, a history file, the old status table, dirty fixtures, two test files and one short guide. Click a folder to see what changes."], "src": ["src/meridian_workbench/", "New in your starter pack: <code>legacy.py</code> (the old system&rsquo;s four status codes and <code>map_legacy_status()</code>, read by Python and by Spark) and <code>make_history.py</code> (the generator for the history file). The new <code>spark/</code> package is in the next folder. Nothing else here is edited: the Python rules, contracts and reports are the same."], "spark": ["spark/", "Nine small files. In your starter pack: <code>__init__.py</code> and <code>session.py</code> (<code>build_session</code>). Written in class: <code>schemas.py</code> (explicit, all-string schemas), <code>readers.py</code> (CSV, JSON and Parquet readers, with row numbers that match Python), <code>judge.py</code> (the case, note and shipment rules as column expressions), <code>candidates.py</code> (the attention rules and the capped <code>review_candidates</code>), <code>estimate.py</code> (the cost estimate, with no call), <code>vertical_slice.py</code> (reads, judges, writes, and the manifest) and <code>parity.py</code> (five checks against Python)."], "tests": ["tests/", "Two new files, written mostly in class: <code>test_spark_slice.py</code> (36 checks that use the shared Spark session) and <code>test_spark_boundary.py</code> (10 checks that read imports and fail if any Spark file reaches a model client). That is 46 new checks. At the end there are 357 checks, and one that is expected to fail. In your starter pack, <code>conftest.py</code> gets the shared <code>spark</code> fixture and lets connections to this same computer through, because Spark&rsquo;s Python side talks to its own Java process on 127.0.0.1."], "data": ["history/ and fixtures/", "<code>history/cases_2024.parquet</code> is the old system&rsquo;s export: 2,000 rows, 29 of them broken on purpose. <code>fixtures/spark_dirty/</code> holds a dirty <code>cases.csv</code> (17 rows, 11 bad), <code>notes.json</code> (7 items, 2 bad) and <code>shipments.csv</code> (10 rows, 6 bad). All of it is in your starter pack. It is not real customer data."], "docs": ["docs/", "New: <code>spark_slice.md</code>, one short guide to the slice. <code>terminology.md</code> gains eleven new rows (driver, executor, partition, shuffle, UDF and more)."], "files": ["pyproject.toml, requirements.txt and README.md", "The version moves from 0.9.0 to 0.10.0, with a <code>spark</code> extra, a <code>spark</code> test marker and a note for pyarrow in mypy. <code>requirements.txt</code> pins pyspark 4.0.1, pyarrow 18.1.0, pandas 2.2.3 and numpy 2.1.3. The README gets a Spark section."]};
+  function showDir(k) {
+    var d = DIRS[k];
+    $('#treeTitle').textContent = d[0];
+    $('#treeText').innerHTML = '<p style="margin:0">' + d[1] + '</p>';
+  }
+  $$('#treeBox button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      $$('#treeBox button').forEach(function (x) { x.setAttribute('aria-pressed', 'false'); });
+      b.setAttribute('aria-pressed', 'true');
+      showDir(b.dataset.d);
+    });
+  });
+  showDir('root');
+
+  /* ---------- sorter ---------- */
+  function sorter(el, bins, items, doneMsg) {
+    var sel = null, left = items.length, wrong = 0;
+    var pool = document.createElement('div'); pool.className = 'pool';
+    var hint = document.createElement('p'); hint.className = 'hint';
+    var grid = document.createElement('div'); grid.className = 'bins';
+    var chips = [];
+    items.forEach(function (it) {
+      var c = document.createElement('button'); c.className = 'chip'; c.textContent = it.t; c.setAttribute('aria-pressed', 'false');
+      c.addEventListener('click', function () {
+        chips.forEach(function (x) { x.classList.remove('sel'); x.setAttribute('aria-pressed', 'false'); });
+        sel = it; c.classList.add('sel'); c.setAttribute('aria-pressed', 'true');
+        hint.className = 'hint'; hint.textContent = 'Now click the bin for this item.';
+      });
+      it.chip = c; chips.push(c); pool.appendChild(c);
+    });
+    bins.forEach(function (b) {
+      var d = document.createElement('button'); d.className = 'bin';
+      d.innerHTML = '<b>' + esc(b.label) + '</b><span class="why">' + esc(b.sub || '') + '</span><span class="placed"></span>';
+      d.addEventListener('click', function () {
+        if (!sel) { hint.className = 'hint'; hint.textContent = 'Click an item first, then a bin.'; return; }
+        var it = sel;
+        if (it.bin === b.k) {
+          var s = document.createElement('span'); s.textContent = it.t; $('.placed', d).appendChild(s);
+          pool.removeChild(it.chip); sel = null; left--;
+          hint.className = 'hint good'; hint.textContent = 'Correct. ' + it.why;
+          if (!left) {
+            var e = document.createElement('span'); e.className = 'empty'; e.textContent = 'All sorted.'; pool.appendChild(e);
+            hint.textContent = (wrong === 0 ? 'Perfect, with no mistakes. ' : 'All sorted, with ' + wrong + ' wrong ' + (wrong === 1 ? 'try' : 'tries') + '. ') + (doneMsg || '');
+          }
+        } else {
+          wrong++; d.classList.add('flash'); setTimeout(function () { d.classList.remove('flash'); }, 500);
+          hint.className = 'hint bad'; hint.textContent = 'Not quite. ' + (it.hint || 'Think about what went wrong.');
+        }
+      });
+      grid.appendChild(d);
+    });
+    el.appendChild(pool); el.appendChild(hint); el.appendChild(grid);
+  }
+  sorter($('#sortKinds'), [{"k": "drv", "label": "Driver", "sub": "plans, prints, small results"}, {"k": "exe", "label": "Executor", "sub": "works on partitions"}, {"k": "out", "label": "Neither", "sub": "outside Spark, later"}], [{"t": "Builds the plan and prints the counts", "bin": "drv", "why": "The driver is your script. It builds the plan and receives small results such as counts.", "hint": "Who holds the clipboard?"}, {"t": "Runs the judge on one partition of rows", "bin": "exe", "why": "Tasks run on executors, one task for each partition.", "hint": "Who works on the pieces of the data?"}, {"t": "Writes one part of the Parquet output", "bin": "exe", "why": "Each task writes its own piece of the output, so the writes happen on the executors.", "hint": "Is it work on one piece of the data?"}, {"t": "Receives the result of count()", "bin": "drv", "why": "A count is a small result that comes back to the driver.", "hint": "Small results go where?"}, {"t": "Writes manifest.json after the Parquet is written", "bin": "drv", "why": "The driver writes the manifest last, so a folder without one is an unfinished run.", "hint": "Who sees that everything finished?"}, {"t": "A paid model call for each flagged case", "bin": "out", "why": "Never inside Spark rows. A Python step later (Class 12) can hold a cap, a rate limit, a cache and a key.", "hint": "Could it be repeated by a retry?"}, {"t": "The cap, the rate limit and the cache for the model", "bin": "out", "why": "These belong to the Python step that calls the model, not to distributed row processing.", "hint": "Where does a single call get counted?"}], 'The driver plans, the executors work, and the model call stays outside.');
+
+  /* ---------- section 6 ---------- */
+  sorter($('#sortWrap'), [{"k": "tr", "label": "Transformation", "sub": "builds the plan, runs nothing"}, {"k": "ac", "label": "Action", "sub": "asks for a result, starts work"}], [{"t": "select(...)", "bin": "tr", "why": "select describes a new table. Nothing runs yet.", "hint": "Does it need a result right now?"}, {"t": "filter(...)", "bin": "tr", "why": "filter is a transformation: it only adds a step to the plan.", "hint": "Does it start work?"}, {"t": "withColumn(...)", "bin": "tr", "why": "withColumn adds a column to the plan. Spark runs it later.", "hint": "Plan or result?"}, {"t": "count()", "bin": "ac", "why": "count asks for a number, so Spark runs the plan from the source.", "hint": "It returns a number to the driver"}, {"t": "write.parquet(...)", "bin": "ac", "why": "A write is an action: it starts a job and produces files.", "hint": "Does it produce files?"}, {"t": "collect()", "bin": "ac", "why": "collect runs the plan and brings every row to the driver, which is why it is unsafe on a big table.", "hint": "It returns rows to the driver"}, {"t": "withColumnRenamed(...)", "bin": "tr", "why": "Renaming a column is another step in the plan, with no work done.", "hint": "Does a name change need any rows?"}], 'Transformations build the plan. Actions start the work.');
+
+  chipReadout('#closeChips .chip', '#closeOut', [["Zero jobs", "<code>df.filter(...).select(...)</code> with a written schema ran <strong>0</strong> Spark jobs. The first <code>count()</code> ran 1 job. The same <code>count()</code> again ran one more, and read the file again.", "Remember that transformations only build a plan. Use <code>cache()</code> when one table feeds several results."], ["Two counts, two reads", "Without <code>cache()</code>, two actions on the same plan read the source twice. With <code>cache()</code>, the first action fills it, and the next ones read from memory.", "Cache the raw reads that several results share, as the slice does."], ["A shuffle in the plan", "Keeping the first row of each <code>case_id</code> is a window. The plan shows one <code>Exchange hashpartitioning(case_id, 4)</code>: the rows of one case are moved to the same partition. The other rules need no shuffle.", "Look for <code>Exchange</code> in <code>explain()</code>. A shuffle is the expensive step, so use it only where a rule needs it."], ["A collect that fails", "With the driver&rsquo;s result limit set to 2 MB, <code>take(3)</code> and <code>limit(1000)</code> worked, and <code>collect()</code> on 200,000 rows failed: <code>Total size of serialized results of 2 tasks (3.1 MiB) is bigger than spark.driver.maxResultSize (2.0 MiB)</code>.", "Bring back counts, a <code>take</code> or a <code>limit</code>. Write big results to Parquet, and read the files in the next step."], ["A Python UDF", "The same days-overdue calculation on 197,939 rows: native 0.19 seconds, Python UDF 1.89, pandas UDF 0.96. All three gave 120,978 days. The UDF plan shows <code>BatchEvalPython</code>.", "Use native expressions. Keep the Python function as the reference, and check that the two agree."]], 'What to do:');
+
+  /* ---------- section 7 ---------- */
+  sorter($('#sortRetry'), [{"k": "meas", "label": "Measured", "sub": "counted by running here"}, {"k": "sim", "label": "Simulated", "sub": "a stand-in, not real"}, {"k": "asr", "label": "Assumed", "sub": "a price or a guess"}], [{"t": "Python judge: 3.4 seconds on 200,000 rows", "bin": "meas", "why": "It was timed by running the code, on a two-core machine. Your seconds will differ.", "hint": "Did we run it and time it?"}, {"t": "1,971 of 2,000 history rows accepted", "bin": "meas", "why": "The slice counted every input row, and the numbers add up with the 29 quarantined.", "hint": "Counted by the slice"}, {"t": "17 calls for 12 notes in the fake-model demo", "bin": "sim", "why": "The count is real, but the model is a fake. It shows what a retry would do, and nothing was paid.", "hint": "Is the model real?"}, {"t": "The price of 5.0 dollars per million output tokens", "bin": "asr", "why": "It is a dated assumption in prices.toml, not a vendor quote.", "hint": "Who decided the price?"}, {"t": "All 12,569 eligible notes would cost about $5.54", "bin": "asr", "why": "The call count is measured, but the dollars come from assumed prices and token counts estimated as text length divided by four.", "hint": "What are the dollars based on?"}, {"t": "Parity: 1,978 mappings compared, all equal", "bin": "meas", "why": "The parity command compared every curated case against the Python judge.", "hint": "Was it compared by running?"}, {"t": "Tokens estimated as text length divided by four", "bin": "asr", "why": "It is a rule of thumb used when no real token count exists.", "hint": "Is it an exact count?"}], 'Keep the three kinds of fact apart, and say which kind each number is.');
+
+  chipReadout('#stackChips .chip', '#stackOut', [["Do the engines agree?", "The parity command compared Spark&rsquo;s files with the Python judge: 4 counts, 1,986 identifiers (1,978 curated cases, 3 notes and 5 shipments), 1,978 mappings, 29 rejection reasons and 2 review candidates. Every check passed.", "Run <code>python -m meridian_workbench.spark.parity</code> and read <code>PARITY: PASS</code>."], ["A copy broken on purpose", "A copy of the output with one status changed and one reason reworded made the mapping check and the reason check fail, while counts and identifiers still passed. Each check can fail on its own, and its message says where to look.", "A check that cannot fail proves nothing. Break a copy to see that yours can fail."], ["The cap", "On the 200,000-row export, 15,711 cases are flagged, 12,569 are eligible and 3,142 are too short. The slice writes 200 of them (the cap), ordered by days overdue, and the manifest records how many the cap left out.", "A bounded, ordered table is the same on every run. Check <code>left_out_by_cap</code> in the manifest."], ["The cost estimate", "200 calls: about 35,212 input tokens, $0.0882 at typical replies and $0.3352 at the reply cap. All 12,569 eligible notes: 2,212,931 input tokens, $5.5437 typical and $21.0664 at the cap. Prices are an assumption as of 2026-11-04.", "Estimate before any live call, and let a person approve the amount. Nothing was called, and the manifest says <code>model_calls_made: 0</code>."], ["Why not call the model in Spark?", "A fake model in a UDF was called 17 times for 12 notes after a collect, and 34 times after a second action (simulated). In Spark, a failed task can be retried and every action runs the plan again, so calls repeat without anyone deciding.", "Spark writes a capped table. The model is called later, from a Python step that can hold a cap, a rate limit, a cache and a key. A test reads the imports and fails if a Spark file reaches a model client."]], 'The rule:');
+
+  chipReadout('#traceChips .chip', '#traceOut', [["PySparkRuntimeError: [JAVA_GATEWAY_EXITED] Java gateway process exited before sending its port number", "Spark could not start Java: it is missing, too old, or <code>JAVA_HOME</code> points at the wrong one.", "Run <code>java -version</code>. It must show 17 or newer (21 is used here). Install Temurin 21 if needed, open a new terminal, and on a Mac set <code>JAVA_HOME</code> and <code>SPARK_LOCAL_IP</code>."], ["_corrupt_record", "A JSON list written over several lines was read without <code>multiLine=True</code>, so Spark treated the brackets as bad records. Nothing failed.", "Read <code>notes.json</code> with <code>multiLine=True</code>, and always check the columns after a read."], ["[CANNOT_PARSE_TIMESTAMP] Text '2025-02-30' could not be parsed", "Spark 4 runs in ANSI mode, so a strict <code>to_date</code> stops the whole job on a bad date.", "Use <code>F.try_to_timestamp</code> with an explicit pattern. It gives null, and a null can be turned into a reason."], ["is bigger than spark.driver.maxResultSize", "A <code>collect()</code> brought too many rows to the driver.", "Bring back counts or a small sample, and write the rest to Parquet."], ["Fingerprints: DIFFERENT from before", "A trusted output changed when it should not have.", "Stop. Find which file changed and why, before going any further. Class 11 adds Spark next to the Python code and never changes the reports."]], 'What it means:');
+
+  /* ---------- quiz ---------- */
+  function quiz(el, items, scoreEl) {
+    var answered = 0, right = 0;
+    items.forEach(function (it, qi) {
+      var q = document.createElement('div'); q.className = 'q';
+      var p = document.createElement('p'); p.className = 'qt'; p.textContent = (qi + 1) + '. ' + it.q; q.appendChild(p);
+      var fb = document.createElement('div'); fb.className = 'fb';
+      var btns = [];
+      it.o.forEach(function (txt, oi) {
+        var b = document.createElement('button'); b.className = 'opt'; b.textContent = txt; btns.push(b);
+        b.addEventListener('click', function () {
+          if (btns.some(function (x) { return x.disabled; })) return;
+          btns.forEach(function (x) { x.disabled = true; });
+          answered++;
+          if (oi === it.a) { b.classList.add('right'); right++; fb.textContent = 'Correct. ' + it.e; fb.style.color = 'var(--ok)'; }
+          else { b.classList.add('wrong'); btns[it.a].classList.add('right'); fb.textContent = 'Not quite. ' + it.e; fb.style.color = 'var(--bad)'; }
+          if (scoreEl && answered === items.length) {
+            scoreEl.textContent = 'You got ' + right + ' of ' + items.length + '. ' + (right === items.length ? 'Great work.' : 'Re-read the sections for any you missed, then reload the page to try again.');
+          }
+        });
+        q.appendChild(b);
+      });
+      q.appendChild(fb); el.appendChild(q);
+    });
+  }
+  quiz($('#finalQuiz'), [{"q": "Why can pip install pyspark not run Spark without a separate Java install?", "o": ["The package is too big for pip, so pip leaves out the part that does the real work", "Spark's engine runs on the JVM, and pyspark installs only the Python side", "Python 3.11 has no support for Spark, so a Java layer is needed to translate for it", "Spark is a cluster product, and pip has no way to start the machines that it needs"], "a": 1, "e": "pyspark carries the Python code and the Spark libraries, but Spark itself runs on the JVM. Your Python script starts a Java process and talks to it, so with no Java the session cannot start. That was the JAVA_GATEWAY_EXITED error."}, {"q": "A script builds df.filter(...).select(...) on a big CSV. Spark has read nothing and run no job. Why?", "o": ["The file is cached already, so a second read would be wasted work for the cluster", "The driver skipped the lines because the plan did not hold any column with data", "Spark waits for the partitions, and none exist until the first executor starts up", "Both are transformations, which only build a plan until an action asks for a result"], "a": 3, "e": "Transformations describe a new table and run nothing. Work starts at an action such as count, show, collect or write. In class, the line ran 0 jobs, and the first count() ran 1."}, {"q": "Why is a paid model call inside a UDF a bad design for Spark?", "o": ["Retries and repeat actions rerun the plan, so calls repeat and no cap can hold", "UDFs cannot call anything outside Spark, so the call would fail every time it is tried", "Model calls are too slow for the driver, which has to wait for each reply in turn", "The cost goes up with the number of columns, and a UDF touches every column of the row"], "a": 0, "e": "In class a fake model was called 17 times for 12 notes after one action and 34 after a second. A cap, a rate limit and a cache cannot be enforced inside distributed row processing, so the call belongs in a Python step later."}, {"q": "inferSchema=True gave a date column for one file and a string column for the next. What is the best fix?", "o": ["Sample more rows, because a larger sample gives a stable guess for every future file", "Cast the column to date after the read, so each bad value turns into null and passes", "Write a string schema, then parse in expressions and keep a reason per bad value", "Move the date step into a Python UDF, which accepts a column of any type at all"], "a": 2, "e": "An inferred type is a property of the data, so it can change when the data changes. A written schema removes the guess, and parsing in expressions keeps a reason for each bad row."}, {"q": "Python judged 200,000 rows in 3.4 seconds. The whole Spark slice took 48 seconds on the same export. What is the honest reading?", "o": ["Spark has a bug, and the slice should be rewritten in plain Python at once", "At this size Python wins, and the two do different work: Spark's fixed costs dominate", "A real cluster would be about fourteen times faster than this laptop run, for sure", "Timings do not matter in data work, so only the counts need to be compared"], "a": 1, "e": "On two cores in local mode, startup, row numbers, about 20 jobs and five Parquet writes add up. The Python figure is the three judges only. The case for Spark is Parquet history, growth and files from other teams, not speed at this size."}], $('#finalScore'));
+
+  /* checklist: tick, and remember in this browser */
+  var checkDone = {};
+  try { checkDone = JSON.parse(localStorage.getItem('c11preread-checks') || '{}') || {}; } catch (e) { checkDone = {}; }
+  $$('#finalChecks li').forEach(function (li) {
+    var ck = $('.ck', li);
+    var tx = document.createElement('span'); tx.className = 'tx';
+    while (ck.nextSibling) tx.appendChild(ck.nextSibling);
+    li.appendChild(tx);
+    li.style.cursor = 'pointer';
+    function paint(on) { li.classList.toggle('done', on); ck.textContent = on ? '✓' : ''; }
+    paint(!!checkDone[li.dataset.check]);
+    li.addEventListener('click', function () {
+      checkDone[li.dataset.check] = !checkDone[li.dataset.check];
+      paint(!!checkDone[li.dataset.check]);
+      try { localStorage.setItem('c11preread-checks', JSON.stringify(checkDone)); } catch (e) { /* ignore */ }
+    });
+  });
+
+  /* nav highlight while scrolling */
+  try {
+    var secs = $$('section.card'), links = $$('nav a');
+    window.addEventListener('scroll', function () {
+      var cur = secs[0].id;
+      secs.forEach(function (s) { if (s.getBoundingClientRect().top < 160) cur = s.id; });
+      links.forEach(function (a) { a.style.fontWeight = a.dataset.s === cur ? '700' : '400'; });
+    }, { passive: true });
+  } catch (e) { /* ignore */ }
+})();
+</script>
+</body>
+</html>

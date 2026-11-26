@@ -306,6 +306,32 @@
     <div class="box"><b>3. Keep the model outside</b>Spark writes a capped table. The model is called later, from Python, after an estimate</div>
   </div>
 
+  
+  <h3>The tools behind this class, in plain words</h3>
+  <p>Everything here is new to most of you, so this is the whole picture in one place. Click a tool to read about it.</p>
+  <div class="chips" id="toolChips">
+    <button class="chip" data-i="0" aria-pressed="false">Python</button>
+    <button class="chip" data-i="1" aria-pressed="false">Spark</button>
+    <button class="chip" data-i="2" aria-pressed="false">PySpark</button>
+    <button class="chip" data-i="3" aria-pressed="false">Java (the JVM)</button>
+    <button class="chip" data-i="4" aria-pressed="false">Parquet</button>
+    <button class="chip" data-i="5" aria-pressed="false">Local mode</button>
+  </div>
+  <div class="readout" id="toolOut" aria-live="polite">Click a tool above.</div>
+  <div class="tablewrap">
+  <table>
+    <tr><th>Question</th><th>Plain answer</th></tr>
+    <tr><td><strong>Why is Java here, in a Python course?</strong></td><td>Spark&rsquo;s engine is written in Scala and runs on the Java Virtual Machine (JVM). <code>pip install pyspark</code> installs the Python side and the Spark libraries, but not Java itself. When your code starts a SparkSession, Python starts a Java process in the background and talks to it. No Java means no Spark. You install Java once in section 3, and you never write any Java.</td></tr>
+    <tr><td><strong>Who does what?</strong></td><td>Python decides: the rules, the checks and, later, the model call. Spark prepares: it reads, validates and writes tables. Java is the engine under Spark.</td></tr>
+    <tr><td><strong>Why use Spark at all?</strong></td><td>Plain Python is faster on small files. On 200,000 rows the Python judge takes 3.4 seconds and the whole Spark slice 48 seconds on two cores. Spark is worth it when history arrives as Parquet, the data keeps growing, or it no longer fits in one process. The class teaches you to spot that point.</td></tr>
+    <tr><td><strong>Do I need a cluster?</strong></td><td>No. Spark runs in local mode on your computer. The code does not change on a cluster, but a laptop timing is never a cluster timing.</td></tr>
+    <tr><td><strong>Can I skip Java?</strong></td><td>No. A pip-installed Java (jdk4py) failed in testing. Install Temurin 21 as shown in section 3. Google Colab is a fallback if you install Java 17 or newer there with apt.</td></tr>
+  </table>
+  </div>
+  <div class="callout tip"><strong class="t">Lazy, driver and executor in one breath</strong>
+    <code>filter</code> and <code>select</code> only build a plan, and work starts at an action such as <code>count()</code> or a write. The <strong>driver</strong> is your script, which plans and receives small results. <strong>Executors</strong> do the work on partitions (pieces) of the data, and in local mode they are threads inside the one Spark Java process.
+  </div>
+
   <div class="callout warn"><strong class="t">What we will not do in Class 11</strong>
     No cluster: Spark runs in local mode, so every timing is a small-machine timing. No streaming and no Spark ML. No model call in the slice, real or simulated: the one <strong>fake</strong> model in Section 9 of the class only counts how often Spark would call it. Prices are <strong>assumptions</strong> in a dated file, not quotes. The reports, the three fingerprints and the Streamlit app stay the same.
   </div>
@@ -350,7 +376,7 @@ git --version</pre></div>
   <div class="callout tip"><strong class="t">Why Java, when the course is Python?</strong>
     Spark&rsquo;s engine is written in Scala and runs on the Java Virtual Machine (the JVM). <code>pip install pyspark</code> installs the Python side and the Spark libraries, but not Java itself. When your code starts a SparkSession, Python starts a Java process in the background and talks to it. No Java means no Spark. You install it once, and then you work only in Python.
   </div>
-  <p>Download <strong>Temurin 21 (LTS)</strong>, a free Java from the Adoptium project, from this page: <a href="https://adoptium.net/temurin/releases?version=21&amp;os=any&amp;arch=any" target="_blank" rel="noopener" class="placeholder">adoptium.net/temurin/releases (version 21)</a>. On that page, use the filters to choose your operating system and chip, set the package type to <strong>JDK</strong>, and keep version <strong>21 &ndash; LTS</strong>. Then follow the steps for your system.</p>
+  <p>Download <strong>Temurin 21 (LTS)</strong>, a free Java from the Adoptium project, from this page: <a class="placeholder" href="https://adoptium.net/temurin/releases?version=21&amp;os=any&amp;arch=any" target="_blank" rel="noopener">adoptium.net/temurin/releases (version 21)</a>. On that page, use the filters to choose your operating system and chip, set the package type to <strong>JDK</strong>, and keep version <strong>21 &ndash; LTS</strong>. Then follow the steps for your system.</p>
   <div class="tabs" data-tabs="java">
     <div class="tablist" role="tablist" aria-label="Operating system for Java">
       <button role="tab" aria-selected="true" data-tab="win">Windows</button>
@@ -640,6 +666,16 @@ python -m mypy</pre></div>
   }
 
   chipReadout('#hideChips .chip', '#hideOut', [["Do we need Spark?", "On a 200,000-row export, the Python judge (the three judges only) took 3.4 seconds. The Spark slice, which does more (startup, row numbers, the attention rules, the candidates and five Parquet outputs), took 48.09 seconds, with 20 jobs on two cores. The two do different amounts of work.", "At this size Python is faster, and we say so. The case for Spark is history that arrives as Parquet and keeps growing, volume that may stop fitting in one process, and files that other teams already write in Parquet."], ["A guessed schema", "<code>inferSchema=True</code> gave a date column for a clean file and a string column for a file with one bad date. The same line gave two different answers, because the type came from the data.", "Write the schema once, read every text column as a string, and parse in expressions, so that each bad value keeps a reason."], ["Nothing ran", "<code>df.filter(...).select(...)</code> on a 200,000-row CSV, with a written schema, ran 0 Spark jobs. The first <code>count()</code> ran 1 job. The same <code>count()</code> again ran one more and read the file again.", "Know where the actions are. Use <code>cache()</code> when one table feeds several results."], ["A model inside a UDF", "A <strong>fake</strong> paid model inside a UDF was called 17 times for 12 notes after one action, because a task failed and reran its rows. A second action made 17 more, so 34 in all. (Simulated: the count is real, the model is not.)", "Keep model calls outside Spark. Write a capped table, and call the model later from Python, with a cap, a rate limit and a cache."]], 'What to do:');
+
+
+  chipReadout('#toolChips .chip', '#toolOut', [
+    ["Python", "The language you write. In this project it holds the rules, the checks and, later, the model step. It reads well and is fast enough for small files.", "Use it to decide, and to call the model."],
+    ["Spark", "A tool for processing big tables by cutting them into pieces (partitions) and working on the pieces in parallel. It is lazy: it builds a plan and runs it only when you ask for a result. Its engine is written in Scala.", "Use it to prepare data: read, validate, transform and write."],
+    ["PySpark", "How you drive Spark from Python. You write Python, and PySpark sends the plan to the Spark engine. It is installed with pip, together with the Spark libraries.", "You write only Python. pip does not install Java."],
+    ["Java (the JVM)", "Spark runs on the Java Virtual Machine. Python starts a Java process in the background and talks to it. That is why <code>java -version</code> must work, and why a missing Java gives <code>JAVA_GATEWAY_EXITED</code>.", "Java 17 or newer, and Java 21 (Temurin) is what we use. Section 3 has the install steps for Windows and Mac."],
+    ["Parquet", "A file format for tables. It is stored column by column and compressed, it keeps the column types, and it is binary, so you read it with pandas or Spark and not a text editor. The old system&rsquo;s history arrives this way.", "Spark writes a folder of Parquet part files, one for each partition."],
+    ["Local mode", "Spark on your own computer. The driver and the executors run on this one machine, as threads in one Java process. We run it as <code>local[2]</code>, which means two tasks at once.", "Counts match everywhere, seconds do not. Never read a laptop timing as a cluster timing."]
+  ], 'Remember:');
 
   /* ---------- section 4: folder explorer ---------- */
   var DIRS = {"root": ["The whole project", "The Class 10 layout stays. Class 11 adds a <code>spark</code> package, a history file, the old status table, dirty fixtures, two test files and one short guide. Click a folder to see what changes."], "src": ["src/meridian_workbench/", "New in your starter pack: <code>legacy.py</code> (the old system&rsquo;s four status codes and <code>map_legacy_status()</code>, read by Python and by Spark) and <code>make_history.py</code> (the generator for the history file). The new <code>spark/</code> package is in the next folder. Nothing else here is edited: the Python rules, contracts and reports are the same."], "spark": ["spark/", "Nine small files. In your starter pack: <code>__init__.py</code> and <code>session.py</code> (<code>build_session</code>). Written in class: <code>schemas.py</code> (explicit, all-string schemas), <code>readers.py</code> (CSV, JSON and Parquet readers, with row numbers that match Python), <code>judge.py</code> (the case, note and shipment rules as column expressions), <code>candidates.py</code> (the attention rules and the capped <code>review_candidates</code>), <code>estimate.py</code> (the cost estimate, with no call), <code>vertical_slice.py</code> (reads, judges, writes, and the manifest) and <code>parity.py</code> (five checks against Python)."], "tests": ["tests/", "Two new files, written mostly in class: <code>test_spark_slice.py</code> (36 checks that use the shared Spark session) and <code>test_spark_boundary.py</code> (10 checks that read imports and fail if any Spark file reaches a model client). That is 46 new checks. At the end there are 357 checks, and one that is expected to fail. In your starter pack, <code>conftest.py</code> gets the shared <code>spark</code> fixture and lets connections to this same computer through, because Spark&rsquo;s Python side talks to its own Java process on 127.0.0.1."], "data": ["history/ and fixtures/", "<code>history/cases_2024.parquet</code> is the old system&rsquo;s export: 2,000 rows, 29 of them broken on purpose. <code>fixtures/spark_dirty/</code> holds a dirty <code>cases.csv</code> (17 rows, 11 bad), <code>notes.json</code> (7 items, 2 bad) and <code>shipments.csv</code> (10 rows, 6 bad). All of it is in your starter pack. It is not real customer data."], "docs": ["docs/", "New: <code>spark_slice.md</code>, one short guide to the slice. <code>terminology.md</code> gains eleven new rows (driver, executor, partition, shuffle, UDF and more)."], "files": ["pyproject.toml, requirements.txt and README.md", "The version moves from 0.9.0 to 0.10.0, with a <code>spark</code> extra, a <code>spark</code> test marker and a note for pyarrow in mypy. <code>requirements.txt</code> pins pyspark 4.0.1, pyarrow 18.1.0, pandas 2.2.3 and numpy 2.1.3. The README gets a Spark section."]};
